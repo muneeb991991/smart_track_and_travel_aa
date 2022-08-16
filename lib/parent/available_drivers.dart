@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_track_and_travel/parent/send_request.dart';
+import '../driver/google_map_box.dart';
 import 'datatwo.dart';
 class AvailableDriver extends StatefulWidget {
   const AvailableDriver({Key? key}) : super(key: key);
@@ -42,6 +43,10 @@ class _AvailableDriverState extends State<AvailableDriver> {
           values [key]["destination"],
           values [key]["raating"],
           values [key]["raatingno"],
+          values [key]["Lat"],
+          values [key]["Late"],
+          values [key]["Long"],
+          values [key]["Longe"],
         );
         dataList.add(data);
         print(dataList[0].phone);
@@ -60,10 +65,33 @@ class _AvailableDriverState extends State<AvailableDriver> {
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width*0.17,
-              child: Padding(
+              child:
+              Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: TextField(
-                  cursorColor: Colors.red,
+                  cursorColor: Colors.blue,
+                  onChanged: (text) {
+                    SearchMethod1(text);
+                  },
+                  textInputAction: TextInputAction.go,
+                  decoration: const InputDecoration(
+                      hintText: "Type City",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15.0),),
+                      )
+                  ),
+
+                ),
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width*0.17,
+              child:
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: TextField(
+                  cursorColor: Colors.blue,
                   onChanged: (text) {
                     SearchMethod(text);
                   },
@@ -96,6 +124,10 @@ class _AvailableDriverState extends State<AvailableDriver> {
 
                   itemBuilder: (_, index) {
                     double ak =double.parse(dataList[index].raating);
+                    double la =double.parse(dataList[index].Lat);
+                    double lon =double.parse(dataList[index].Long);
+                    double lae =double.parse(dataList[index].Late);
+                    double lone =double.parse(dataList[index].Longe);
                     return Card(
                       color: Colors.white,
                       child: Column(
@@ -309,22 +341,58 @@ class _AvailableDriverState extends State<AvailableDriver> {
                                 child:
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(8, 6, 0, 0),
-                                  child: Text("Route",style: TextStyle(color: Colors.white),),
+                                  child: Text("Destination",style: TextStyle(color: Colors.white),),
                                 )
                             ),
                           ),
+                          // ElevatedButton(onPressed: (){
+
+                          // }, child: Text("lll")),
                           Card(
                             elevation: 8,
                             child: Container(
                               //color: Colors.blue,
-                                height: MediaQuery.of(context).size.width*0.222,
+                                height: MediaQuery.of(context).size.width*0.132,
                                 width: MediaQuery.of(context).size.width,
                                 child:
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(8, 8,8, 0),
-                                  child: Text(dataList[index].route+" "+dataList[index].destination
-                                    ,style: TextStyle(),),
+                                  child: Text(dataList[index].destination+" City : "+dataList[index].route),
                                 )
+                            ),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              print("llll");
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) => GooMapBox(ls: la, los: lon, le: lae, loe: lone,),));
+
+                            },
+                            child: Card(
+                              elevation: 8,
+                              child: Container(
+                                //color: Colors.blue,
+                                  height: MediaQuery.of(context).size.width*0.15,
+                                  width: MediaQuery.of(context).size.width,
+                                  child:
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                    child: Row(
+                                      children: [
+
+                                        Text("Route Through Map",style: TextStyle(),),
+                                        const Expanded(child: SizedBox()),
+                                        Align(alignment: Alignment.topRight,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(8, 15, 12, 0),
+                                              child: Icon(Icons.arrow_forward),
+                                            )
+                                        ),
+                                      ],
+
+                                    ),
+                                  )
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -367,8 +435,51 @@ class _AvailableDriverState extends State<AvailableDriver> {
           values [key]["destination"],
           values [key]["raating"],
           values [key]["raatingno"],
+          values [key]["Lat"],
+          values [key]["Late"],
+          values [key]["Long"],
+          values [key]["Longe"],
         );
-        if (data.destination.contains(text)){
+        if (data.destination.contains(text.toLowerCase().toLowerCase())){
+          dataList.add(data);
+        }
+        Timer(Duration(seconds: 1),(){
+          setState(() {
+          });
+        });
+
+      }
+
+    });
+
+  }void SearchMethod1(String text) {
+    Query referenceData = FirebaseDatabase.instance.reference().child("Drivers");
+    referenceData.once().then((DataSnapshot dataSnapshot) {
+      dataList.clear();
+      var keys = dataSnapshot.value.keys;
+      var values = dataSnapshot.value;
+      for (var key in keys) {
+        Data data = Data(
+          values [key]["availableseats"],
+          values [key]["dues"],
+          values [key]["name"],
+          values [key]["phone"],
+          values [key]["picUrl"],
+          values [key]["reserveseats"],
+          values [key]["route"],
+          values [key]["totalseats"],
+          values [key]["uid"],
+          values [key]["vahicalno"],
+          values [key]["vehicalcilor"],
+          values [key]["destination"],
+          values [key]["raating"],
+          values [key]["raatingno"],
+          values [key]["Lat"],
+          values [key]["Late"],
+          values [key]["Long"],
+          values [key]["Longe"],
+        );
+        if (data.route.contains(text.toLowerCase().toLowerCase())){
           dataList.add(data);
         }
         Timer(Duration(seconds: 1),(){

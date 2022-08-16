@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -24,22 +26,31 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _nameController=TextEditingController(text: widget.data.DriverName);
-    _phoneController=TextEditingController(text: widget.data.phoneno);
-    _totalseatsController=TextEditingController(text: widget.data.totalseats);
-    _reserveseatsController=TextEditingController(text: widget.data.reserve);
-    _routeController=TextEditingController(text: widget.data.route);
-    _vehicalnoController=TextEditingController(text: widget.data.vehicalno);
-    _vehicalcolorController=TextEditingController(text: widget.data.vehicalcolor);
-    _DuesController=TextEditingController(text: widget.data.dues);
-    _availableseatsController=TextEditingController(text: widget.data.available);
-    _desController=TextEditingController(text: widget.data.destination);
+    setState(() {
+      _nameController=TextEditingController(text: widget.data.DriverName);
+      _phoneController=TextEditingController(text: widget.data.phoneno);
+      _totalseatsController=TextEditingController(text: widget.data.totalseats);
+      _reserveseatsController=TextEditingController(text: widget.data.reserve);
+      _routeController=TextEditingController(text: widget.data.route);
+      _vehicalnoController=TextEditingController(text: widget.data.vehicalno);
+      _vehicalcolorController=TextEditingController(text: widget.data.vehicalcolor);
+      _DuesController=TextEditingController(text: widget.data.dues);
+      _availableseatsController=TextEditingController(text: widget.data.available);
+      _desController=TextEditingController(text: widget.data.destination);
+    });
+
     _reference =FirebaseDatabase.instance.reference().child('Drivers');
 
   }
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    print("llllllllllllll");
+    print(widget.data.DriverName);
+    print("llllllllllllll");
+    print(widget.data.cnic);
+    print("llllllllllllll");
+    print("llllllllllllll");
 
 
     return  SafeArea(
@@ -51,45 +62,8 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
             key: _formKey,
             child: Column(
               children: [
-                Container(
-                  height: 70,
-                  width: 70,
-                  child:c==0 ? SizedBox(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.width*0.25,
-                    child: Container(
-                      //height: MediaQuery.of(context).size.width*0.25,
-                      alignment: const Alignment(0.0,2.5),
-                      child:  CircleAvatar(
-                        backgroundColor: Colors.black12,
-                        child:
-                        CircleAvatar(
-                          // backgroundColor: Colors.black12,
-                          radius: 65,
-                          //backgroundImage: AssetImage('assets/bottombar/loading.gif'),
-                          child: CircleAvatar(
-                            radius: 65,
-                            backgroundColor: Colors.transparent,
-                            backgroundImage: NetworkImage(widget.data.image),
-                          ),
-                        ),
-                        radius: 80.0,
-                      ),
-                    ),
-                  ):
-                  Image.file(
-                    imgFile,
-                    height: 200,
-                    width: double.infinity,
-                  ),
-                ),
-                RaisedButton(
-                    child: Text('Upload image',style: TextStyle(color: Colors.white),),
-                    color: Colors.blue,
 
-                    onPressed: (){
-                      uploadImage();
-                    }),
+
                 Column(
                   children: [
 
@@ -118,6 +92,7 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
                           return null;
                         },
                         controller: _phoneController,
+                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           labelText: 'Phone Number',
                           border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)),),
@@ -133,6 +108,7 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
                           return null;
                         },
                         controller: _totalseatsController,
+                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           labelText: 'Total Seats',
                           border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)),),
@@ -148,6 +124,7 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
                           return null;
                         },
                         controller: _reserveseatsController,
+                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           labelText: 'Resrve Seats',
                           border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)),),
@@ -163,6 +140,7 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
                           return null;
                         },
                         controller: _availableseatsController,
+                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           labelText: 'Available Seats',
                           border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)),),
@@ -178,10 +156,8 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
                           return null;
                         },
                         controller: _routeController,
-                        minLines: 2,
-                        maxLines: 5,
                         decoration: const InputDecoration(
-                          labelText: 'Route',
+                          labelText: 'City',
                           // hintText: 'description',
                           hintStyle: TextStyle(
                               color: Colors.grey
@@ -248,6 +224,7 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
                           return null;
                         },
                         controller: _DuesController,
+                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           labelText: 'Dues per Month',
                           border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)),),
@@ -268,7 +245,21 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
                 ),
                 ),
                   onPressed: (){
-                    saveProduct();
+                    if(_DuesController==""||_vehicalcolorController==""||_vehicalnoController==""||_nameController==""){
+                      print("Kindly fill all Fields your route");
+                      Fluttertoast.showToast(
+                          msg: "Kindely select your Route",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    }
+                    else{
+                      saveProduct();
+                    }
                   },
                 ),
                 SizedBox(
@@ -284,7 +275,7 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
 
   }
   void saveProduct(){
-
+    print("ll");
 
     String name = _nameController.text;
     String phone = _phoneController.text;
@@ -297,6 +288,7 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
     String dues = _DuesController.text;
     String dest = _desController.text;
     String key = _reference.push().key as String;
+    print(widget.data.uoid);
     Map<String,String> products={
       'name' :name,
       'phone' :phone,
@@ -308,14 +300,28 @@ class _CreateEditAccountState extends State<CreateEditAccount> {
       'vehicalcilor' :vehicalcilor,
       'dues' :dues,
       'destination' :dest,
-      'picUrl' :fileUrl,
-      'uid' : widget.data.uoid
+      'picUrl' :widget.data.image,
+      'uid' : widget.data.uoid,
+      'raating' :5.toString(),
+      'raatingno' :0.toString(),
+      'status' : "Active",
+      'Cnic' : widget.data.cnic,
+      'Lat' : widget.data.lat1,
+      'Long' : widget.data.long1,
+      'Late' : widget.data.late1,
+      'Longe' : widget.data.longe1,
     };
 
 
+
     _reference.child(widget.data.uoid).set(products).then((value) {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => HomeDriver()));
+      print("ll");
+      setState(() {
+        _nameController.text="";
+
+      });
+      // Navigator.of(context)
+      //     .pushReplacement(MaterialPageRoute(builder: (context) => HomeDriver()));
     });
     //Navigator.pop(context);
     // });

@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_track_and_travel/phone_login_two_type_user/login_splash.dart';
+import 'package:smart_track_and_travel/route/google_map_route.dart';
+import 'driver/driver_profile.dart';
 import 'phone_login_two_type_user/check_type.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
