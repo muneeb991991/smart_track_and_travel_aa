@@ -15,9 +15,9 @@ class DriverProfile extends StatefulWidget {
   ,required this.a,required this.b,required this.c
   ,required this.d,required this.e,required this.f
   ,required this.g,required this.h,required this.i
-  ,required this.j,required this.k,required this.l}) : super(key: key);
+  ,required this.j,required this.k}) : super(key: key);
 
-  final String data,lat,long,late,longe,a,b,c,d,e,f,g,h,i,j,k,l;
+  final String data,lat,long,late,longe,a,b,c,d,e,f,g,h,i,j,k;
   @override
   _CreateEditAccountState createState() => _CreateEditAccountState();
 }
@@ -64,7 +64,7 @@ class _CreateEditAccountState extends State<DriverProfile> {
                 Container(
                   height: 70,
                   width: 70,
-                  child:widget.l=="" ? Icon(Icons.person,size: 70,color: Colors.blue,):
+                  child: c==0 ? Icon(Icons.person,size: 70,color: Colors.blue,):
 
                   Image.file(
 
@@ -289,7 +289,7 @@ class _CreateEditAccountState extends State<DriverProfile> {
                           a:_nameController.text,b:_phoneController.text,c:_totalseatsController.text,
                           d:_reserveseatsController.text,e:_routeController.text,f:_vehicalnoController.text,
                           g:_vehicalcolorController.text,h:_DuesController.text,i:_availableseatsController.text,
-                          j:_destinationController.text,k:_cnicController.text,l:fileUrl)));
+                          j:_destinationController.text,k:_cnicController.text,)));
 
                     }, child: Text("Start Point")),
                     Text("latitude"+widget.lat),
@@ -300,7 +300,7 @@ class _CreateEditAccountState extends State<DriverProfile> {
                           a:_nameController.text,b:_phoneController.text,c:_totalseatsController.text,
                           d:_reserveseatsController.text,e:_routeController.text,f:_vehicalnoController.text,
                           g:_vehicalcolorController.text,h:_DuesController.text,i:_availableseatsController.text,
-                          j:_destinationController.text,k:_cnicController.text,l:fileUrl
+                          j:_destinationController.text,k:_cnicController.text,
 
 
                       )));

@@ -204,7 +204,7 @@ class _LoginTypeState extends State<LoginType> {
                         _referenc.child(q.r).set(products).then((value) {
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(builder: (context) => DriverProfile(data: q.r, longe: '', late: '', long: '', lat: '',a: "",b: "",
-                          c: "",d: "",e: "",f: "",g: "",h: "",i: "",j: "",k: "",l: "",)));
+                          c: "",d: "",e: "",f: "",g: "",h: "",i: "",j: "",k: "")));
                         });
                         // Navigator.of(context)
                         //     .pushReplacement(MaterialPageRoute(builder: (context) => DriverProfile(data: q.r)));

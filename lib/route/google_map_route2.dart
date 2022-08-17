@@ -9,8 +9,8 @@ class GooMap2 extends StatefulWidget {
      ,required this.a,required this.b,required this.c
      ,required this.d,required this.e,required this.f
      ,required this.g,required this.h,required this.i
-     ,required this.j,required this.k,required this.l}) : super(key: key);
-   final String ls,los,data,a,b,c,d,e,f,g,h,i,j,k,l;
+     ,required this.j,required this.k,}) : super(key: key);
+   final String ls,los,data,a,b,c,d,e,f,g,h,i,j,k;
   @override
   State<GooMap2> createState() => _GoogleMapState();
 }
@@ -105,7 +105,7 @@ class _GoogleMapState extends State<GooMap2> {
                   .pushReplacement(MaterialPageRoute(builder: (context) => DriverProfile(data:widget.data,lat:widget.ls,long:widget.los,late:latend.toString(),longe:longend.toString(),
                   a:widget.a,b:widget.b,c:widget.c,d:widget.d,e:widget.e,
                   f:widget.f,g:widget.g,h:widget.h,i:widget.i,j:widget.j,
-                  k:widget.k,l:widget.l,
+                  k:widget.k,
 
 
               )));
